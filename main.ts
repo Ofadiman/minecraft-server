@@ -1,6 +1,6 @@
 import { Construct } from 'constructs'
-import { App, TerraformOutput, TerraformStack, LocalBackend } from 'cdktf'
-import { AwsProvider, ec2, vpc } from '@cdktf/provider-aws'
+import { App, TerraformStack, LocalBackend } from 'cdktf'
+import { AwsProvider, ec2, vpc, route53 } from '@cdktf/provider-aws'
 import * as fs from 'fs'
 
 class MinecraftServerStack extends TerraformStack {
@@ -100,8 +100,21 @@ class MinecraftServerStack extends TerraformStack {
       userData: userData,
     })
 
-    new TerraformOutput(this, 'public_ip', {
-      value: instance.publicIp,
+    const elasticIp = new ec2.Eip(this, 'minecraft_server_ip', {
+      vpc: true,
+      instance: instance.id,
+    })
+
+    const hostedZone = new route53.DataAwsRoute53Zone(this, 'manually_created_hosted_zone', {
+      name: 'ofadiman.com',
+    })
+
+    new route53.Route53Record(this, 'minecraft_server_record', {
+      name: `minecraft.${hostedZone.name}`,
+      records: [elasticIp.publicIp],
+      ttl: 300,
+      type: 'A',
+      zoneId: hostedZone.zoneId,
     })
   }
 }
