@@ -1,0 +1,19 @@
+# JetBrains
+.idea
+
+# SSH key files
+public_ec2_rsa
+public_ec2_rsa.pub
+
+# Terraform files
+!jest.config.js
+!setup.js
+*.d.ts
+*.js
+*terraform.*.tfstate*
+.gen
+.terraform
+cdktf.log
+cdktf.out
+node_modules
+tsconfig.tsbuildinfo
