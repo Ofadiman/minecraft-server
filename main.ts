@@ -88,14 +88,16 @@ class MinecraftServerStack extends TerraformStack {
       tags: {},
     })
 
+    const userData = fs.readFileSync('./userdata.sh', 'utf-8')
     const instance = new ec2.Instance(this, 'minecraft_server_ec2_instance', {
       ami: 'ami-0c1bc246476a5572b',
       associatePublicIpAddress: true,
-      instanceType: 't2.medium',
+      instanceType: 'c5.xlarge',
       keyName: sshKeyPair.keyName,
       subnetId: publicSubnet.id,
       tags: {},
       vpcSecurityGroupIds: [securityGroup.id],
+      userData: userData,
     })
 
     new TerraformOutput(this, 'public_ip', {
