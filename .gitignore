@@ -17,3 +17,8 @@ cdktf.log
 cdktf.out
 node_modules
 tsconfig.tsbuildinfo
+
+# Docker volumes
+data/*
+!data/.gitkeep
+!data/server.properties

@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  minecraft:
+    container_name: minecraft_server
+    image: itzg/minecraft-server@sha256:f03531633a058dc2591430d9636cb6803ddb1de6f8f36634dde21d165ae705ac
+    restart: on-failure # I would like the container to be automatically restarted when it is stopped due to any error (https://docs.docker.com/config/containers/start-containers-automatically/).
+    stdin_open: true
+    tty: true
+    ports:
+      - '25565:25565' # The Minecraft server runs on port 25565 by default.
+    environment:
+      EULA: 'TRUE' # Accept terms of services from Microsoft (EULA).
+      EXEC_DIRECTLY: 'true' # This option allows you to display colors in the terminal and adds interactivity.
+      MEMORY: "7G" # This environment variable configured to an empty string causes the JVM to not have a fixed amount of RAM set.
+      OPS: '81742bc8-dadf-4ceb-85dc-23a267d92aae' # The environment variable allows you to set server administrators.
+      SNOOPER_ENABLED: 'false' # I would like to not send data to the Mojang snooper server regarding users activity.
+      STOP_SERVER_ANNOUNCE_DELAY: 600 # Here I configure that the Minecraft server will wait 600 seconds before it is shut down. He wants this behavior so players can finish what they were doing in peace. When using this option and `docker-compose` I MUST remember to call `docker-compose down` with the `--timeout 600` flag.
+      TYPE: 'VANILLA'
+      TZ: 'Europe/Warsaw'
+      VERSION: '1.19' # By default, the container downloads the latest version of Minecraft. I would like the version to be locked to the one I specify myself.
+
+    volumes:
+      - ./data:/data
