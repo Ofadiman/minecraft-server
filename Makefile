@@ -26,3 +26,9 @@ docker/logs:
 
 docker/stop:
 	@docker-compose stop
+
+sftp/vultr:
+	@sftp -i ~/.ssh/id_ed25519_vultr root@70.34.242.32
+
+ssh/vultr:
+	@ssh -i ~/.ssh/id_ed25519_vultr root@70.34.242.32
